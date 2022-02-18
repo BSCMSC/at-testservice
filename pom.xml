@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.example</groupId>
+    <artifactId>testProject</artifactId>
+    <version>1.0.0</version>
+
+    <properties>
+        <allure.version>2.17.2</allure.version>
+        <aspectj.version>1.9.6</aspectj.version>
+        <env>tests</env>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    </properties>
+
+    <dependencies>
+        <!--ЯДРО ВЫПОЛНЕНИЯ ТЕСТОВ TESTNG-->
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>7.5</version>
+        </dependency>
+        <dependency>
+            <groupId>org.opentest4j</groupId>
+            <artifactId>opentest4j</artifactId>
+            <version>1.2.0</version>
+        </dependency>
+        <!--ГЕНЕРАТОР ОТЧЕТОВ О РЕЗУЛЬТАТАХ ВЫПОЛНЕНИЯ ТЕСТОВ-->
+        <dependency>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-java-commons</artifactId>
+            <version>${allure.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-testng</artifactId>
+            <version>${allure.version}</version>
+        </dependency>
+        <!--ЧТЕНИЕ PROPERTY-->
+        <dependency>
+            <groupId>org.aeonbits.owner</groupId>
+            <artifactId>owner</artifactId>
+            <version>1.0.12</version>
+        </dependency>
+        <!--БИБЛИОТЕКА ДЛЯ ТЕСТИРОВАНИЯ REST СЕРВИСОВ-->
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <version>4.2.0</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.retrofit2</groupId>
+            <artifactId>converter-gson</artifactId>
+            <version>2.4.0</version>
+        </dependency>
+        <!--БИБЛИОТЕКА ДЛЯ СЕРИАЛИЗАЦИИ/ДЕСЕРИАЛИЗАЦИИ JSON ОБЪЕКТОВ-->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.8.6</version>
+            <scope>compile</scope>
+        </dependency>
+        <!--HTTP Java КЛИЕНТ-->
+        <dependency>
+            <groupId>com.squareup.retrofit2</groupId>
+            <artifactId>converter-simplexml</artifactId>
+            <version>2.4.0</version>
+        </dependency>
+        <!--КОДОГЕНЕРАЦИЯ НА ОСНОВЕ АННОТАЦИЙ ДЛЯ КЛАССА (GETTERS/SETTERS/CONSTRUCTORS/ETC)-->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.8</version>
+            <scope>provided</scope>
+        </dependency>
+        <!--БИБЛИОТЕКА ДЛЯ РАБОТЫ C JSON НА ОСНОВЕ УТВЕРЖДЕНИЙ-->
+        <dependency>
+            <groupId>net.javacrumbs.json-unit</groupId>
+            <artifactId>json-unit</artifactId>
+            <version>2.18.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.awaitility</groupId>
+            <artifactId>awaitility</artifactId>
+            <version>4.0.3</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>java-hamcrest</artifactId>
+            <version>2.0.0.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-xml</artifactId>
+            <version>2.9.0</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.6</version>
+        </dependency>
+        <dependency>
+            <groupId>xmlunit</groupId>
+            <artifactId>xmlunit</artifactId>
+            <version>1.4</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>2.22.2</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0-M3</version>
+                <configuration>
+                    <testFailureIgnore>true</testFailureIgnore>
+                    <suiteXmlFiles>
+                        <suiteXmlFile>src/test/resources/${env}.xml</suiteXmlFile>
+                    </suiteXmlFiles>
+                    <argLine>
+                        -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
+                    </argLine>
+                    <systemProperties>
+                        <property>
+                            <name>log.level</name>
+                            <!--debug - логирует ответы и запросы к сервису в консоль-->
+                            <value>INFO</value>
+                        </property>
+                        <property>
+                            <name>allure.results.directory</name>
+                            <value>${project.build.directory}/allure-results</value>
+                        </property>
+                    </systemProperties>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.aspectj</groupId>
+                        <artifactId>aspectjweaver</artifactId>
+                        <version>1.9.6</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>io.qameta.allure</groupId>
+                <artifactId>allure-maven</artifactId>
+                <version>2.10.0</version>
+                <configuration>
+                    <reportVersion>2.13.0</reportVersion>
+                    <resultsDirectory>allure-results</resultsDirectory>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

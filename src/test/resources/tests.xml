@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="МКС: Test-Service" verbose="1" parallel="tests" thread-count="3" preserve-order="false">
+    <test name="МКС: Test-Service. Роль - ADMIN">
+        <parameter name="userName" value="ADMIN"/>
+        <groups>
+            <run>
+                <include name="admin"/>
+            </run>
+        </groups>
+        <packages>
+            <package name="apitests.tests.*"/>
+        </packages>
+    </test>
+    <test name="МКС: Test-Service. Роль - USER">
+        <parameter name="userName" value="USER"/>
+        <groups>
+            <run>
+                <include name="user"/>
+            </run>
+        </groups>
+        <packages>
+            <package name="apitests.tests.*"/>
+        </packages>
+    </test>
+    <test name="МКС: Test-Service. Без роли">
+        <groups>
+            <run>
+                <include name="other"/>
+            </run>
+        </groups>
+        <packages>
+            <package name="apitests.tests.*"/>
+        </packages>
+    </test>
+</suite> <!-- Default Suite -->
